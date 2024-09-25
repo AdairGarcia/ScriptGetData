@@ -22,7 +22,7 @@ def normalizer(string):
 
 def clean_data(df):
     empty_df = df[0:0]
-    empty_df.to_csv('raw data corpus.csv', index=False)
+    empty_df.to_csv('normalized data corpus.csv', index=False)
 
 def add_data():
     df = pd.read_csv('../Script/raw data corpus.csv')
@@ -35,4 +35,5 @@ def add_data():
 if __name__ == '__main__':
     stop_words_spanish = get_stop_words('spanish')
 
-    add_data()
+    # add_data()
+    clean_data(pd.read_csv('normalized data corpus.csv'))
