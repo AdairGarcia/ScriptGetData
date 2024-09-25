@@ -1,5 +1,6 @@
 import feedparser as fp
 import pandas as pd
+import re
 
 # Section of interest are:
 # Sports
@@ -14,7 +15,6 @@ import pandas as pd
 # URL (<link>)
 # Date of publication (<pubDate>)
 
-#cambiar formato de fecha
 
 def get_news(url, source, section):
     df = pd.read_csv('raw data corpus.csv')
@@ -28,8 +28,9 @@ def get_news(url, source, section):
             print(f"Post: {post.title} already in dataframe")
             continue
         else:
+            new_date = change_date_format(post.published)
             new_data.append(
-                [source, post.title, post.description, section, post.link, post.published]
+                [source, post.title, post.description, section, post.link, new_date]
             )
             new_entries += 1
 
@@ -45,7 +46,30 @@ def clean_data(df):
     empty_df = df[0:0]
     empty_df.to_csv('raw data corpus.csv', index=False)
 
+def change_date_format(old_date):
+
+    new_date = date.search(old_date).group(0).split(" ")
+    month = months.get(new_date[1])
+    new_date = f"{new_date[0]}/{month}/{new_date[2]}"
+
+    return new_date
+
 if __name__ == '__main__':
+    months = {
+        "Jan": "01",
+        "Feb": "02",
+        "Mar": "03",
+        "Apr": "04",
+        "May": "05",
+        "Jun": "06",
+        "Jul": "07",
+        "Aug": "08",
+        "Sep": "09",
+        "Oct": "10",
+        "Nov": "11",
+        "Dec": "12"
+    }
+    date = re.compile("\d\d? \w\w\w \d\d\d\d")
 
     new_entries = get_news('https://www.jornada.com.mx/rss/deportes.xml?v=1', 'La Jornada', 'Sports')
 
@@ -59,3 +83,9 @@ if __name__ == '__main__':
 
     print(f"New entries: {new_entries}")
     print(f"Total entries: {len(pd.read_csv('raw data corpus.csv'))}")
+
+    # df = pd.read_csv('raw data corpus.csv')
+    # df['Date'] = df['Date'].apply(change_date_format)
+    # df.to_csv('raw data corpus.csv', index=False)
+
+
