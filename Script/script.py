@@ -2,20 +2,6 @@ import feedparser as fp
 import pandas as pd
 import re
 
-# Section of interest are:
-# Sports
-# Economy
-# Science and technology
-# Culture
-
-# For each news article extract:
-# Title (<title>)
-# Content summary (<description>)
-# Section
-# URL (<link>)
-# Date of publication (<pubDate>)
-
-
 def get_news(url, source, section):
     df = pd.read_csv('raw data corpus.csv')
     d = fp.parse(url)
@@ -47,7 +33,6 @@ def clean_data(df):
     empty_df.to_csv('raw data corpus.csv', index=False)
 
 def change_date_format(old_date):
-
     new_date = date.search(old_date).group(0).split(" ")
     month = months.get(new_date[1])
     new_date = f"{new_date[0]}/{month}/{new_date[2]}"
@@ -83,9 +68,3 @@ if __name__ == '__main__':
 
     print(f"New entries: {new_entries}")
     print(f"Total entries: {len(pd.read_csv('raw data corpus.csv'))}")
-
-    # df = pd.read_csv('raw data corpus.csv')
-    # df['Date'] = df['Date'].apply(change_date_format)
-    # df.to_csv('raw data corpus.csv', index=False)
-
-
