@@ -1,18 +1,17 @@
 import spacy as sp
-from stop_words import get_stop_words
 import pandas as pd
 
 def normalizer(string):
     if not isinstance(string, str):
         return ""
 
-    nlp = sp.load("es_core_news_sm")
     doc = nlp(string)
+    postaggin = ['DET', 'PRON', 'ADP', 'CCONJ', 'SCONJ']
 
     no_stop_words_string = ""
 
     for token in doc:
-        if (not token.lemma_.lower() in stop_words_spanish) and (token.pos_ != "PUNCT"):
+        if not(token.pos_ in postaggin) and (token.pos_ != "PUNCT"):
             no_stop_words_string += token.lemma_ + " "
         elif token.pos_ == "PUNCT" and token.i == len(doc) - 1:
             no_stop_words_string = no_stop_words_string[:-1]
@@ -33,7 +32,6 @@ def add_data():
 
 
 if __name__ == '__main__':
-    stop_words_spanish = get_stop_words('spanish')
+    nlp = sp.load("es_core_news_sm")
 
-    # add_data()
-    clean_data(pd.read_csv('normalized data corpus.csv'))
+    add_data()

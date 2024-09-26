@@ -14,6 +14,7 @@ import pandas as pd
 # URL (<link>)
 # Date of publication (<pubDate>)
 
+#cambiar formato de fecha
 
 def get_news(url, source, section):
     df = pd.read_csv('raw data corpus.csv')
